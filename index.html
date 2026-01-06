@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Enkripsi Gambar Responsif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-lock"></i> Enkripsi Gambar <span class="hidden-mobile">dengan Visualisasi</span></h1>
+            <p class="subtitle">Ubah gambar menjadi kode terenkripsi dan sebaliknya. <span class="hidden-mobile">Lihat setiap langkah proses secara real-time.</span></p>
+            <p class="mobile-only">Geser untuk melihat semua konten</p>
+        </header>
+        
+        <div class="app-container">
+            <!-- Panel Input (Kiri) -->
+            <div class="panel">
+                <h2><i class="fas fa-upload"></i> Input Gambar</h2>
+                
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Klik atau seret gambar</p>
+                    <p><small>JPG, PNG, GIF (≤ 2MB)</small></p>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="file-info" id="fileInfo">
+                    <div><strong>Nama:</strong> <span id="fileName">-</span></div>
+                    <div><strong>Ukuran:</strong> <span id="fileSize">-</span></div>
+                    <div><strong>Dimensi:</strong> <span id="fileDimensions">-</span></div>
+                    <div><strong>Tipe:</strong> <span id="fileType">-</span></div>
+                </div>
+                
+                <div class="preview-container" id="imagePreviewContainer">
+                    <img class="image-preview" id="imagePreview" alt="Preview Gambar">
+                    <div class="placeholder" id="imagePlaceholder">
+                        <i class="fas fa-image"></i>
+                        <p>Gambar akan tampil di sini</p>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div class="input-group">
+                        <label for="encryptionKey"><i class="fas fa-key"></i> Kunci Enkripsi</label>
+                        <input type="password" id="encryptionKey" placeholder="Minimal 6 karakter">
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="encryptBtn">
+                            <i class="fas fa-lock"></i> Enkripsi
+                        </button>
+                        <button class="btn btn-danger" id="resetBtn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel Output (Kanan) -->
+            <div class="panel">
+                <h2><i class="fas fa-code"></i> Kode Terenkripsi</h2>
+                
+                <div class="code-container" id="codeOutput">
+                    <div class="placeholder" id="codePlaceholder">
+                        <i class="fas fa-lock"></i>
+                        <p>Kode akan muncul di sini</p>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="decryptKey"><i class="fas fa-key"></i> Kunci Dekripsi</label>
+                    <input type="password" id="decryptKey" placeholder="Masukkan kunci yang sama">
+                </div>
+                
+                <div class="preview-container" id="decryptedPreviewContainer">
+                    <img class="image-preview" id="decryptedImagePreview" alt="Gambar Terdekripsi">
+                    <div class="placeholder" id="decryptedPlaceholder">
+                        <i class="fas fa-image"></i>
+                        <p>Gambar hasil dekripsi</p>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="decryptBtn">
+                        <i class="fas fa-unlock"></i> Dekripsi
+                    </button>
+                    <button class="btn btn-success" id="copyCodeBtn" disabled>
+                        <i class="fas fa-copy"></i> Salin
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel Proses -->
+        <div class="process-panel">
+            <h2><i class="fas fa-cogs"></i> Visualisasi Proses</h2>
+            
+            <div class="process-steps">
+                <!-- Langkah 1 -->
+                <div class="step" id="step1">
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="step-title">Upload</div>
+                    <div class="step-desc">Tunggu gambar...</div>
+                    <div class="step-detail" id="step1Detail"></div>
+                </div>
+                
+                <!-- Langkah 2 -->
+                <div class="step" id="step2">
+                    <div class="step-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="step-title">Ekstrak Data</div>
+                    <div class="step-desc">Ambil data gambar...</div>
+                    <div class="step-detail" id="step2Detail"></div>
+                </div>
+                
+                <!-- Langkah 3 -->
+                <div class="step" id="step3">
+                    <div class="step-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="step-title">Enkripsi</div>
+                    <div class="step-desc">Proses XOR...</div>
+                    <div class="step-detail" id="step3Detail"></div>
+                </div>
+                
+                <!-- Langkah 4 -->
+                <div class="step" id="step4">
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="step-title">Hasil</div>
+                    <div class="step-desc">Siapkan output...</div>
+                    <div class="step-detail" id="step4Detail"></div>
+                </div>
+            </div>
+            
+            <div class="process-log">
+                <div class="log-title">
+                    <i class="fas fa-history"></i> Log Proses
+                </div>
+                <div id="processLog">
+                    <div class="log-entry info">
+                        <span class="log-time">00:00:00</span>
+                        Sistem siap. Unggah gambar untuk mulai.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Dibuat dengan <i class="fas fa-heart" style="color:#f44336;"></i> | Enkripsi Gambar Responsif</p>
+            <p>Semua proses di browser. Aman & privat.</p>
+            <p class="mobile-only">Mode Mobile</p>
+            <p class="hidden-mobile">Mode Desktop/Laptop</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
